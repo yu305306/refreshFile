@@ -30,6 +30,7 @@ package
 		private var fristStr:String;
 
 		private var debugStr:String='';
+		private var debugFaileStr:String='';
 
 		public function refreshUrl()
 		{
@@ -86,7 +87,8 @@ package
 					cUrlLoader.removeEventListener(CUrlLoaderEvent.SUCCESS, onSucc);
 					cUrlLoader.removeEventListener(CUrlLoaderEvent.FAILE, onFaile);
 				}
-				debugStr=url;
+				debugFaileStr=url;
+				debugStr=str;
 				cUrlLoader=new CUrlLoader(str);
 				cUrlLoader.addEventListener(CUrlLoaderEvent.SUCCESS, onSucc);
 				cUrlLoader.addEventListener(CUrlLoaderEvent.FAILE, onFaile);
@@ -96,15 +98,14 @@ package
 
 		protected function onFaile(e:CUrlLoaderEvent):void
 		{
-			var slice:String=debugStr.slice(1);
+			var slice:String=debugFaileStr.slice(1);
 			_loadmc.faileName.text+=slice + ' :失败\n';
 			upLink();
 		}
 
 		protected function onSucc(e:CUrlLoaderEvent):void
 		{
-			var slice:String=debugStr.slice(1);
-			_loadmc.succName.text+=slice + ' :成功\n';
+			_loadmc.succName.text+=debugStr + ' :成功\n';
 			upLink();
 		}
 
@@ -143,9 +144,9 @@ package
 				fileUrlArr.reverse();
 				for (var i:int=0; i < fileUrlArr.length; i++) {
 					var s:String=fileUrlArr[i];
-//					var exp1:RegExp=new RegExp("//", "g");
+					var exp1:RegExp=/\\/g;
 					s=s.replace(fileNativePath, '');
-					s=s.replace("\\", "/");
+					s=s.replace(exp1, "/");
 					if (fristStr.length == 0) {
 						fristStr=s;
 					}
